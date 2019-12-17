@@ -46,4 +46,4 @@ qtcreator-*
 *.png
 *.bin
 *.obj
-*-mtl
+*.mtl
