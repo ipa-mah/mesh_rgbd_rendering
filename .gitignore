@@ -42,7 +42,6 @@ qtcreator-*
 *.tar
 
 *.ply
-*.txt
 *.png
 *.bin
 *.obj
