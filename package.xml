@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>mesh_rgbd_rendering</name>
+  <version>0.1.0</version>
+  <description>A package for getting RGB-D images and point clouds from a 3D model (.ply, .obj format) </description>
+  <author email="manh.ha.hoang@ipa.fraunhofer.de">Manh-Ha Hoang</author>
+  <maintainer email="manh.ha.hoang@ipa.fraunhofer.de">Manh-Ha Hoang</maintainer>
+  <license>MIT</license>
+	<depend>eigen</depend>
+    <depend>libglfw3-dev</depend>
+	<depend>libglm-dev</depend>
+	<depend>libpcl-all-dev</depend>
+ 	<depend>libopencv-dev</depend>
+    <depend>yaml-cpp</depend>
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>

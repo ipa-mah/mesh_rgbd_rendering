@@ -17,10 +17,11 @@
 #include <glm/ext.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "sources/shader.h"
-#include "sources/gbuffer.h"
+#include "mesh_rgbd_rendering/shader.h"
+#include "mesh_rgbd_rendering/gbuffer.h"
 #include <json/json.h>
-
+#include <stdlib.h>
+#include <iostream>
 
 
 bool isDirExist(const std::string& filename)
@@ -295,7 +296,7 @@ bool ObjectRendering::readData(const std::string &data_path,const std::string& o
 
     data_path_ = data_path;
 
-   // std::string training_data_path = "/home/ipa-mah/object_perception_intern_ws/src/cob_object_perception_intern/cob_object_detection/common/files/models/";
+    // std::string training_data_path = "/home/ipa-mah/object_perception_intern_ws/src/cob_object_perception_intern/cob_object_detection/common/files/models/";
     std::string training_data_path = data_path;
     object_data_path_ = training_data_path+"pc_" + object_name+"/";
     std::cout<<object_data_path_<<std::endl;
@@ -534,7 +535,10 @@ bool ObjectRendering::saveTextureImage()
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindVertexArray(0);
     Shader shader;
-    shader.LoadShaders("../sources/savemode.vert","../sources/savemode.frag");
+    const std::string vert_file = "../shaders/savemode.vert";
+    const std::string frag_file = "../shaders/savemode.frag";
+
+    shader.LoadShaders(vert_file.c_str(),frag_file.c_str());
     shader.setInt("texture_sampler",0);
     glm::mat4 transform_perspective; // perspective transformation
     transform_perspective = glm::mat4(0);
@@ -589,10 +593,10 @@ bool ObjectRendering::saveTextureImage()
         glReadPixels(0, 0, mat.cols, mat.rows, GL_BGR, GL_UNSIGNED_BYTE, mat.data);
         cv::flip(mat, mat, 0);
         std::ostringstream curr_frame_prefix;
-        //        curr_frame_prefix << std::setw(6) << std::setfill('0') << frame_idx;
-        //        cv::imwrite(data_path_+"/frame-"+curr_frame_prefix.str()+".rtexture.png",mat);
-        curr_frame_prefix<<frame_idx;
-        cv::imwrite(object_data_path_+object_name_+"_"+curr_frame_prefix.str()+"_coloredPC_color_8U3.png",mat);
+        curr_frame_prefix << std::setw(6) << std::setfill('0') << frame_idx;
+        cv::imwrite(object_data_path_+"/frame-"+curr_frame_prefix.str()+".rtexture.png",mat);
+        //curr_frame_prefix<<frame_idx;
+        //cv::imwrite(object_data_path_+object_name_+"_"+curr_frame_prefix.str()+"_coloredPC_color_8U3.png",mat);
     }
 
 }
@@ -731,7 +735,7 @@ bool ObjectRendering::saveDepthImage()
                 }
             }
         }
-       // printf("%f percent faces are visible in camera \n",(float)std::count(visible_faces.begin(),
+        // printf("%f percent faces are visible in camera \n",(float)std::count(visible_faces.begin(),
         //                                                                     visible_faces.end(),true)/visible_faces.size());
 
         cv::Mat depth(image_height_,image_width_,CV_16UC1);
@@ -812,9 +816,9 @@ bool ObjectRendering::saveDepthImage()
         curr_frame_prefix<<view;
         //curr_frame_prefix << std::setw(6) << std::setfill('0') << view;
         cv::imwrite(object_data_path_+"/frame-"+curr_frame_prefix.str()+".depth.png",depth);
-        // cv::imwrite(data_path_+"/frame-"+curr_frame_prefix.str()+".mask.png",mask);
-        // pcl::io::savePLYFile(data_path_+"/frame-"+curr_frame_prefix.str()+"cloud.ply",cloud);
-        saveVertexMap(vertex_map,object_data_path_+object_name_+"_"+curr_frame_prefix.str()+"_coloredPC_xyz_32F3.bin");
+        cv::imwrite(object_data_path_+"/frame-"+curr_frame_prefix.str()+".mask.png",mask);
+        pcl::io::savePLYFile(object_data_path_+"/frame-"+curr_frame_prefix.str()+"cloud.ply",cloud);
+        //saveVertexMap(vertex_map,object_data_path_+object_name_+"_"+curr_frame_prefix.str()+"_coloredPC_xyz_32F3.bin");
     }
 }
 bool ObjectRendering::interpolate(const Eigen::Vector2d& p, const Eigen::Vector2d& v0, const Eigen::Vector2d& v1, const Eigen::Vector2d& v2,Eigen::Vector3d& bcoords)

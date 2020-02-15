@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "gl_util.h"
-#include "gbuffer.h"
+#include "mesh_rgbd_rendering/gl_util.h"
+#include "mesh_rgbd_rendering/gbuffer.h"
 
 GBuffer::GBuffer()
 {
