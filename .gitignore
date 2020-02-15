@@ -41,8 +41,8 @@ qtcreator-*
 *.bag
 *.tar
 
-*.ply
-*.png
-*.bin
-*.obj
-*.mtl
+#*.ply
+#*.png
+#*.bin
+#*.obj
+#*.mtl
