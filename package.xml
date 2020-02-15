@@ -11,7 +11,7 @@
 	<depend>libglm-dev</depend>
 	<depend>libpcl-all-dev</depend>
  	<depend>libopencv-dev</depend>
-    <depend>yaml-cpp</depend>
+    <depend>libjsoncpp-dev</depend>
   <export>
     <build_type>cmake</build_type>
   </export>

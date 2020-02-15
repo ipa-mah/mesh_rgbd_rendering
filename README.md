@@ -1,5 +1,5 @@
 # mesh_rgbd_rendering
-This repository takes a polygon mesh (.obj, .ply) as its input, and outputs RGB-D images and pointclouds sampled from the polygon mesh
+This repository takes a texture mesh (.obj, .ply) as its input, and outputs RGB-D images and pointclouds sampled from the texture mesh
 
 1. Script1: generate view points, save intrinsics and cam2world poses in config.json file in folder data_path
     
