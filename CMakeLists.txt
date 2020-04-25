@@ -1,42 +1,108 @@
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required(VERSION 2.8.3)
+project(ros_mesh_rgbd_rendering)
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+# We need a CMAKE_DIR with some code to find external dependencies
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_CXX_STANDARD 14)
+SET(CMAKE_BUILD_TYPE Release)
 
-project (mesh_rgbd_rendering)
+# set catkin packages that are needed when running the code
+set(catkin_RUN_PACKAGES
+    message_generation
+    message_runtime
+    pcl_ros
+    roscpp
+    roslib
+    std_msgs
+    )
 
-# build with c++14
-add_compile_options(-std=c++14)
-set(CMAKE_BUILD_TYPE Release)
+set(catkin_BUILD_PACKAGES
+    cmake_modules
+    ${catkin_RUN_PACKAGES}
 
-
-find_package(OpenCV REQUIRED)
-find_package(OpenGL REQUIRED)
+    )
+find_package(catkin REQUIRED COMPONENTS ${catkin_BUILD_PACKAGES})
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
+find_package(Boost REQUIRED COMPONENTS system chrono thread)
+find_package(Eigen3 REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(PCL REQUIRED)
-#find_package(yaml-cpp REQUIRED)
-find_package(jsoncpp REQUIRED)
-find_package(glfw3 REQUIRED)
-link_directories(${PCL_LIBRARY_DIRS})
+find_package(GLFW3 REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(yaml-cpp)
+
+
+# tinyobjectloader
+include(ExternalProject)
+add_subdirectory(elibs)
+include_directories(${CMAKE_SOURCE_DIR}/elibs)
+
+add_service_files(
+    FILES
+    MeshRGBDRendering.srv
+    ViewGenerator.srv
+    )
+## Generate added messages and services
+generate_messages(DEPENDENCIES std_msgs)
+
+catkin_package(
+    INCLUDE_DIRS common/include
+    CATKIN_DEPENDS ${catkin_RUN_PACKAGES}
+    DEPENDS
+    LIBRARIES
+    )
+
 include_directories(
     common/include
+    ${Boost_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
+    ${EIGEN3_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${OPENGL_INCLUDE_DIRS}
     ${GLUT_INCLUDE_DIRS}
     ${GLFW_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
     ${PCL_INCLUDE_DIRS}
-    ${jsoncpp_INCLUDE_DIR}
-    glm
+    ${YAML_CPP_INCLUDE_DIRS}
     )
 
-file(GLOB sources "${PROJECT_SOURCE_DIR}/common/src/*.cpp")
-add_library(${PROJECT_NAME} ${sources})
-target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES} ${OpenCV_LIBS} ${OPENGL_LIBRARIES}
-    ${GLUT_LIBRARY} ${GLEW_LIBRARIES} ${jsoncpp_LIBRARIES} glfw pthread)
 
-add_executable(mesh_rgbd_rendering_main src/mesh_rgbd_rendering.cpp )
-target_link_libraries(mesh_rgbd_rendering_main ${PROJECT_NAME})
+add_executable(ros_mesh_rgbd_rendering_node ros/ros_mesh_rgbd_rendering_node.cpp)
+add_dependencies(ros_mesh_rgbd_rendering_node
+                 ${catkin_EXPORTED_TARGETS}
+                )
+target_link_libraries(ros_mesh_rgbd_rendering_node
+    ${catkin_LIBRARIES}
+    ${EIGEN3_INCLUDE_DIRS}
+    ${GLFW_LIBRARIES}
+    ${GLUT_LIBRARY}
+    ${GLEW_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    ${OpenCV_LIBRARIES}
+    ${PCL_LIBRARIES}
+    tinyobjloader
+    ${YAML_CPP_LIBRARIES}
+    )
 
-add_executable(view_visualizer src/view_visualizer.cpp)
-target_link_libraries(view_visualizer ${PCL_LIBRARIES} ${OpenCV_LIBS} ${jsoncpp_LIBRARIES})
+add_executable(view_generator ros/view_generator.cpp)
+add_dependencies(view_generator
+                 ${catkin_EXPORTED_TARGETS}
+                )
+target_link_libraries(view_generator
+    ${catkin_LIBRARIES}
+    ${EIGEN3_INCLUDE_DIRS}
+    ${YAML_CPP_LIBRARIES}
+    )
 
-add_executable(view_generator src/view_generator.cpp)
-target_link_libraries(view_generator ${PCL_LIBRARIES} ${OpenCV_LIBS} ${jsoncpp_LIBRARIES} )
+
+
+
+
+
+
+

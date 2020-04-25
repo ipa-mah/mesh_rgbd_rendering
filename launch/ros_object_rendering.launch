@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+        <node name="view_generator" pkg="ros_mesh_rgbd_rendering" type="view_generator" output="screen">
+	</node>
+        <node name="ros_mesh_rgbd_rendering_node" pkg="ros_mesh_rgbd_rendering"
+        type="ros_mesh_rgbd_rendering_node" output="screen">
+	</node>
+</launch>

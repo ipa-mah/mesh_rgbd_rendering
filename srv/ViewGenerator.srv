@@ -1,0 +1,13 @@
+# the directory where the 3d model is located
+string data_path
+# parameters of artifical camera
+float32 focal_length
+float32 c_x
+float32 c_y
+# number of view in horizontal and vertical directions
+uint32 horizontal_views
+uint32 vertical_views
+# distance from camera to world coordinate (0,0,0)
+float32 distance
+---
+bool success

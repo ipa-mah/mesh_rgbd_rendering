@@ -1,0 +1,4 @@
+string data_path
+string mesh_file
+---
+bool success
