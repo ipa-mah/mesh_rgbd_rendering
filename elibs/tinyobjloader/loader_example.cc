@@ -15,8 +15,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <windows.h>
 #include <mmsystem.h>
+#include <windows.h>
 #ifdef __cplusplus
 }
 #endif
@@ -249,17 +249,25 @@ static void PrintInfo(const tinyobj::attrib_t& attrib,
     printf("  material.map_Ns = %s\n",
            materials[i].specular_highlight_texname.c_str());
     printf("  material.map_bump = %s\n", materials[i].bump_texname.c_str());
-    printf("    bump_multiplier = %f\n", static_cast<const double>(materials[i].bump_texopt.bump_multiplier));
+    printf("    bump_multiplier = %f\n",
+           static_cast<const double>(materials[i].bump_texopt.bump_multiplier));
     printf("  material.map_d = %s\n", materials[i].alpha_texname.c_str());
     printf("  material.disp = %s\n", materials[i].displacement_texname.c_str());
     printf("  <<PBR>>\n");
-    printf("  material.Pr     = %f\n", static_cast<const double>(materials[i].roughness));
-    printf("  material.Pm     = %f\n", static_cast<const double>(materials[i].metallic));
-    printf("  material.Ps     = %f\n", static_cast<const double>(materials[i].sheen));
-    printf("  material.Pc     = %f\n", static_cast<const double>(materials[i].clearcoat_thickness));
-    printf("  material.Pcr    = %f\n", static_cast<const double>(materials[i].clearcoat_thickness));
-    printf("  material.aniso  = %f\n", static_cast<const double>(materials[i].anisotropy));
-    printf("  material.anisor = %f\n", static_cast<const double>(materials[i].anisotropy_rotation));
+    printf("  material.Pr     = %f\n",
+           static_cast<const double>(materials[i].roughness));
+    printf("  material.Pm     = %f\n",
+           static_cast<const double>(materials[i].metallic));
+    printf("  material.Ps     = %f\n",
+           static_cast<const double>(materials[i].sheen));
+    printf("  material.Pc     = %f\n",
+           static_cast<const double>(materials[i].clearcoat_thickness));
+    printf("  material.Pcr    = %f\n",
+           static_cast<const double>(materials[i].clearcoat_thickness));
+    printf("  material.aniso  = %f\n",
+           static_cast<const double>(materials[i].anisotropy));
+    printf("  material.anisor = %f\n",
+           static_cast<const double>(materials[i].anisotropy_rotation));
     printf("  material.map_Ke = %s\n", materials[i].emissive_texname.c_str());
     printf("  material.map_Pr = %s\n", materials[i].roughness_texname.c_str());
     printf("  material.map_Pm = %s\n", materials[i].metallic_texname.c_str());
@@ -289,8 +297,8 @@ static bool TestLoadObj(const char* filename, const char* basepath = NULL,
   t.start();
   std::string warn;
   std::string err;
-  bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename,
-                              basepath, triangulate);
+  bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+                              filename, basepath, triangulate);
   t.end();
   printf("Parsing time: %lu [msecs]\n", t.msec());
 
@@ -383,8 +391,7 @@ static bool TestStreamLoadObj() {
     virtual bool operator()(const std::string& matId,
                             std::vector<material_t>* materials,
                             std::map<std::string, int>* matMap,
-                            std::string* warn,
-                            std::string* err) {
+                            std::string* warn, std::string* err) {
       (void)err;
       (void)matId;
       LoadMtl(matMap, materials, &m_matSStream, warn, err);
@@ -402,8 +409,8 @@ static bool TestStreamLoadObj() {
   std::vector<tinyobj::material_t> materials;
   std::string warn;
   std::string err;
-  bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, &objStream,
-                              &matSSReader);
+  bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+                              &objStream, &matSSReader);
 
   if (!err.empty()) {
     std::cerr << err << std::endl;

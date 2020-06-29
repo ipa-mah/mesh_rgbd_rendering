@@ -206,7 +206,7 @@ struct vec3 {
   }
 };
 
-void normalizeVector(vec3 &v) {
+void normalizeVector(vec3& v) {
   float len2 = v.v[0] * v.v[0] + v.v[1] * v.v[1] + v.v[2] * v.v[2];
   if (len2 > 0.0f) {
     float len = sqrtf(len2);
@@ -218,8 +218,7 @@ void normalizeVector(vec3 &v) {
 }
 
 // Check if `mesh_t` contains smoothing group id.
-bool hasSmoothingGroup(const tinyobj::shape_t& shape)
-{
+bool hasSmoothingGroup(const tinyobj::shape_t& shape) {
   for (size_t i = 0; i < shape.mesh.smoothing_group_ids.size(); i++) {
     if (shape.mesh.smoothing_group_ids[i] > 0) {
       return true;
@@ -228,7 +227,8 @@ bool hasSmoothingGroup(const tinyobj::shape_t& shape)
   return false;
 }
 
-void computeSmoothingNormals(const tinyobj::attrib_t& attrib, const tinyobj::shape_t& shape,
+void computeSmoothingNormals(const tinyobj::attrib_t& attrib,
+                             const tinyobj::shape_t& shape,
                              std::map<int, vec3>& smoothVertexNormals) {
   smoothVertexNormals.clear();
   std::map<int, vec3>::iterator iter;
@@ -310,8 +310,8 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
 
   std::string warn;
   std::string err;
-  bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename,
-                              base_dir.c_str());
+  bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+                              filename, base_dir.c_str());
   if (!warn.empty()) {
     std::cout << "WARN: " << warn << std::endl;
   }
@@ -407,7 +407,8 @@ static bool LoadObjAndConvert(float bmin[3], float bmax[3],
       // Check for smoothing group and compute smoothing normals
       std::map<int, vec3> smoothVertexNormals;
       if (hasSmoothingGroup(shapes[s]) > 0) {
-        std::cout << "Compute smoothingNormal for shape [" << s << "]" << std::endl;
+        std::cout << "Compute smoothingNormal for shape [" << s << "]"
+                  << std::endl;
         computeSmoothingNormals(attrib, shapes[s], smoothVertexNormals);
       }
 

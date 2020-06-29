@@ -1,4 +1,5 @@
 string data_path
 string mesh_file
+geometry_msgs/PoseStamped[] extrinsics
 ---
 bool success

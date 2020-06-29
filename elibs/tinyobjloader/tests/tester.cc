@@ -14,7 +14,6 @@
 #pragma GCC diagnostic ignored "-Wswitch-default"
 #endif
 
-
 #include "acutest.h"
 
 #if defined(__clang__)
@@ -1198,10 +1197,9 @@ void test_usemtl_then_o_issue235() {
 
   std::string warn;
   std::string err;
-  bool ret = tinyobj::LoadObj(
-      &attrib, &shapes, &materials, &warn, &err,
-      "../models/issue-235-usemtl-then-o.obj",
-      gMtlBasePath);
+  bool ret =
+      tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+                       "../models/issue-235-usemtl-then-o.obj", gMtlBasePath);
 
   if (!warn.empty()) {
     std::cout << "WARN: " << warn << std::endl;
@@ -1231,10 +1229,9 @@ void test_mtl_searchpaths_issue244() {
 
   std::string warn;
   std::string err;
-  bool ret = tinyobj::LoadObj(
-      &attrib, &shapes, &materials, &warn, &err,
-      "../models/issue-244-mtl-searchpaths.obj",
-      search_paths.c_str());
+  bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+                              "../models/issue-244-mtl-searchpaths.obj",
+                              search_paths.c_str());
 
   TEST_CHECK(warn.empty());
 
@@ -1259,10 +1256,9 @@ void test_usemtl_whitespace_issue246() {
 
   std::string warn;
   std::string err;
-  bool ret = tinyobj::LoadObj(
-      &attrib, &shapes, &materials, &warn, &err,
-      "../models/issue-246-usemtl-whitespace.obj",
-      gMtlBasePath);
+  bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+                              "../models/issue-246-usemtl-whitespace.obj",
+                              gMtlBasePath);
 
   TEST_CHECK(warn.empty());
 
@@ -1287,10 +1283,9 @@ void test_texres_texopt_issue248() {
 
   std::string warn;
   std::string err;
-  bool ret = tinyobj::LoadObj(
-      &attrib, &shapes, &materials, &warn, &err,
-      "../models/issue-248-texres-texopt.obj",
-      gMtlBasePath);
+  bool ret =
+      tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+                       "../models/issue-248-texres-texopt.obj", gMtlBasePath);
 
   TEST_CHECK(warn.empty());
 
@@ -1399,12 +1394,8 @@ TEST_LIST = {
      test_mtl_default_search_path_v2_API_issue208},
     {"leading_zero_in_exponent_notation_issue210",
      test_leading_zero_in_exponent_notation_issue210},
-    {"usemtl_then_o_issue235",
-     test_usemtl_then_o_issue235},
-    {"mtl_searchpaths_issue244",
-     test_mtl_searchpaths_issue244},
-    {"usemtl_whitespece_issue246",
-     test_usemtl_whitespace_issue246},
-    {"texres_texopt_issue248",
-     test_texres_texopt_issue248},
+    {"usemtl_then_o_issue235", test_usemtl_then_o_issue235},
+    {"mtl_searchpaths_issue244", test_mtl_searchpaths_issue244},
+    {"usemtl_whitespece_issue246", test_usemtl_whitespace_issue246},
+    {"texres_texopt_issue248", test_texres_texopt_issue248},
     {NULL, NULL}};

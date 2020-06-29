@@ -1,0 +1,4 @@
+- git:
+    uri: https://github.com/manhha1402/ros_object_detection.git
+    local-name: ros_object_detection
+    version: master

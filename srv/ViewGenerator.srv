@@ -9,5 +9,7 @@ uint32 horizontal_views
 uint32 vertical_views
 # distance from camera to world coordinate (0,0,0)
 float32 distance
+# pcl visualization of camera pose
+bool visualized
 ---
 bool success

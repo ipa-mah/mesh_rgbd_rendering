@@ -49,8 +49,8 @@
  * Much mucking with by:
  * Gavin Bell
  */
-#include <math.h>
 #include "trackball.h"
+#include <math.h>
 
 /*
  * This size should really be based on the distance from the center of
@@ -87,8 +87,7 @@ static void vsub(const float *src1, const float *src2, float *dst) {
 
 static void vcopy(const float *v1, float *v2) {
   register int i;
-  for (i = 0; i < 3; i++)
-    v2[i] = v1[i];
+  for (i = 0; i < 3; i++) v2[i] = v1[i];
 }
 
 static void vcross(const float *v1, const float *v2, float *cross) {
@@ -168,10 +167,8 @@ void trackball(float q[4], float p1x, float p1y, float p2x, float p2y) {
   /*
    * Avoid problems with out-of-control values...
    */
-  if (t > 1.0)
-    t = 1.0;
-  if (t < -1.0)
-    t = -1.0;
+  if (t > 1.0) t = 1.0;
+  if (t < -1.0) t = -1.0;
   phi = 2.0 * asin(t);
 
   axis_to_quat(a, phi, q);
@@ -261,8 +258,7 @@ static void normalize_quat(float q[4]) {
   float mag;
 
   mag = (q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
-  for (i = 0; i < 4; i++)
-    q[i] /= mag;
+  for (i = 0; i < 4; i++) q[i] /= mag;
 }
 
 /*

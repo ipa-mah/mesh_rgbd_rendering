@@ -144,7 +144,8 @@ int main(int argc, char **argv) {
 
   tinyobj::MaterialFileReader mtlReader("../../models/");
 
-  bool ret = tinyobj::LoadObjWithCallback(ifs, cb, &mesh, &mtlReader, &warn, &err);
+  bool ret =
+      tinyobj::LoadObjWithCallback(ifs, cb, &mesh, &mtlReader, &warn, &err);
 
   if (!warn.empty()) {
     std::cout << "WARN: " << warn << std::endl;

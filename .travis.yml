@@ -1,0 +1,24 @@
+language: generic # optional, just removes the language badge
+services:
+  - docker
+notifications:
+  email:
+   on_success: change
+   on_failure: always
+cache:
+  directories:
+    - $HOME/.ccache
+
+git:
+  quiet: true # optional, silences the cloning of the target repository
+env:
+  global: # global settings for all jobs
+    - ROS_REPO=ros
+    - CCACHE_DIR=$HOME/.ccache # enables C/C++ caching in industrial_ci
+    - BEFORE_SCRIPT='.travis/dependencies.sh'
+  matrix: 
+    - ROS_DISTRO=melodic UPSTREAM_WORKSPACE=file
+install:
+  - git clone --quiet --depth 1 https://github.com/ros-industrial/industrial_ci.git .industrial_ci -b master
+script:
+  - .industrial_ci/travis.sh

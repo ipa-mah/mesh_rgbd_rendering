@@ -4,62 +4,60 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../../tiny_obj_loader.h"
 
-bool Voxelize(const char* filename, float voxelsizex, float voxelsizey, float voxelsizez, float precision)
-{
-    tinyobj::attrib_t attrib;
-    std::vector<tinyobj::shape_t> shapes;
-    std::vector<tinyobj::material_t> materials;
-    std::string warn;
-    std::string err;
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename);
+bool Voxelize(const char* filename, float voxelsizex, float voxelsizey,
+              float voxelsizez, float precision) {
+  tinyobj::attrib_t attrib;
+  std::vector<tinyobj::shape_t> shapes;
+  std::vector<tinyobj::material_t> materials;
+  std::string warn;
+  std::string err;
+  bool ret =
+      tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename);
 
-    if (!err.empty()) {
-      printf("err: %s\n", err.c_str());
+  if (!err.empty()) {
+    printf("err: %s\n", err.c_str());
+  }
+
+  if (!ret) {
+    printf("failed to load : %s\n", filename);
+    return false;
+  }
+
+  if (shapes.size() == 0) {
+    printf("err: # of shapes are zero.\n");
+    return false;
+  }
+
+  // Only use first shape.
+  {
+    vx_mesh_t* mesh;
+    vx_mesh_t* result;
+
+    mesh = vx_mesh_alloc(attrib.vertices.size(), shapes[0].mesh.indices.size());
+
+    for (size_t f = 0; f < shapes[0].mesh.indices.size(); f++) {
+      mesh->indices[f] = shapes[0].mesh.indices[f].vertex_index;
     }
 
-    if (!ret) {
-      printf("failed to load : %s\n", filename);
-      return false;
+    for (size_t v = 0; v < attrib.vertices.size() / 3; v++) {
+      mesh->vertices[v].x = attrib.vertices[3 * v + 0];
+      mesh->vertices[v].y = attrib.vertices[3 * v + 1];
+      mesh->vertices[v].z = attrib.vertices[3 * v + 2];
     }
 
-    if (shapes.size() == 0) {
-      printf("err: # of shapes are zero.\n");
-      return false;
-    }
+    result = vx_voxelize(mesh, voxelsizex, voxelsizey, voxelsizez, precision);
 
-    // Only use first shape.
-    {
-        vx_mesh_t* mesh;
-        vx_mesh_t* result;
-
-        mesh = vx_mesh_alloc(attrib.vertices.size(), shapes[0].mesh.indices.size());
-
-        for (size_t f = 0; f < shapes[0].mesh.indices.size(); f++) {
-            mesh->indices[f] = shapes[0].mesh.indices[f].vertex_index;
-        }
-
-        for (size_t v = 0; v < attrib.vertices.size() / 3; v++) {
-            mesh->vertices[v].x = attrib.vertices[3*v+0];
-            mesh->vertices[v].y = attrib.vertices[3*v+1];
-            mesh->vertices[v].z = attrib.vertices[3*v+2];
-        }
-
-        result = vx_voxelize(mesh, voxelsizex, voxelsizey, voxelsizez, precision);
-
-        printf("Number of vertices: %ld\n", result->nvertices);
-        printf("Number of indices: %ld\n", result->nindices);
-    }
-    return true;
+    printf("Number of vertices: %ld\n", result->nvertices);
+    printf("Number of indices: %ld\n", result->nindices);
+  }
+  return true;
 }
 
-
-int
-main(
-  int argc,
-  char** argv)
-{
+int main(int argc, char** argv) {
   if (argc < 4) {
-    printf("Usage: voxelize input.obj voxelsizex voxelsizey voxelsizez precision\n");
+    printf(
+        "Usage: voxelize input.obj voxelsizex voxelsizey voxelsizez "
+        "precision\n");
     exit(-1);
   }
 
@@ -72,4 +70,3 @@ main(
 
   return ret ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-
